@@ -1,0 +1,33 @@
+# Import necessary modules
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+# Sample data (in a real app, you would use a database)
+barbers = [
+    {"id": 1, "name": "Barber 1", "location": "City 1"},
+    {"id": 2, "name": "Barber 2", "location": "City 2"},
+]
+
+@app.route('/')
+def index():
+    return render_template('index.html', barbers=barbers)
+
+@app.route('/barber/<int:barber_id>')
+def barber_profile(barber_id):
+    barber = None
+    for b in barbers:
+        if b['id'] == barber_id:
+            barber = b
+            break
+    return render_template('barber_profile.html', barber=barber)
+
+@app.route('/book/<int:barber_id>', methods=['POST'])
+def book(barber_id):
+    if request.method == 'POST':
+        # Handle booking logic here
+        # You would typically interact with a database to store booking information
+        return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
